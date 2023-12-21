@@ -9,17 +9,17 @@ model = torch.hub.load("ultralytics/yolov5", "yolov5s")  # or yolov5n - yolov5x6
 # Images
 base_path = "images"
 processed_path = "images/processed"
-img = "images/image2.jpg"  # or file, Path, PIL, OpenCV, numpy, list
-
+img = "image1.jpg"  # or file, Path, PIL, OpenCV, numpy, list
+img_path = f"{base_path}/{img}"
 # Inference
-results = model(img)
+results = model(img_path)
 
 # Results
 results.print()  # or .show(), .save(), .crop(), .pandas(), etc.
 
 pred = results.xyxy[0].cpu().numpy()
 
-image = cv2.imread(img)
+image = cv2.imread(img_path)
 
 for xyxy in pred:
     label = model.names[int(xyxy[5])]
@@ -43,6 +43,6 @@ for xyxy in pred:
 
 cv2.imshow("processed image", image)
 cv2.waitKey(0)
-# filename = os.path.join(processed_path, img)
-# print(filename)
-# cv2.imwrite(filename, image)
+filename = f"{processed_path}/{img}"
+print(filename)
+cv2.imwrite(filename, image)
