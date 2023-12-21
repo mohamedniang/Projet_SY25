@@ -19,7 +19,19 @@ results.print()  # or .show(), .save(), .crop(), .pandas(), etc.
 
 pred = results.xyxy[0].cpu().numpy()
 
+<<<<<<< HEAD
 image = cv2.imread(img_path)
+=======
+def count_person(results):
+    pred = results.xyxy[0].cpu().numpy()
+
+    # count the number of person
+    person_count = sum(1 for xyxy in pred if model.names[int(xyxy[5])].lower() == 'person')
+
+    return 'this image has %s person.' %person_count
+
+image = cv2.imread(img)
+>>>>>>> 21012ce (create a new function of counting the person)
 
 for xyxy in pred:
     label = model.names[int(xyxy[5])]
@@ -43,6 +55,12 @@ for xyxy in pred:
 
 cv2.imshow("processed image", image)
 cv2.waitKey(0)
+<<<<<<< HEAD
 filename = f"{processed_path}/{img}"
 print(filename)
 cv2.imwrite(filename, image)
+=======
+filename = os.path.join(processed_path, img)
+print(filename)
+cv2.imwrite(filename, image)
+>>>>>>> 21012ce (create a new function of counting the person)
