@@ -19,7 +19,19 @@ def process_image(img_path):
 
     pred = results.xyxy[0].cpu().numpy()
 
-    image = cv2.imread(img_path)
+<<<<<<< HEAD
+image = cv2.imread(img_path)
+=======
+def count_person(results):
+    pred = results.xyxy[0].cpu().numpy()
+
+    # count the number of person
+    person_count = sum(1 for xyxy in pred if model.names[int(xyxy[5])].lower() == 'person')
+
+    return 'this image has %s person.' %person_count
+
+image = cv2.imread(img)
+>>>>>>> 21012ce (create a new function of counting the person)
 
     for xyxy in pred:
         label = model.names[int(xyxy[5])]
@@ -41,20 +53,14 @@ def process_image(img_path):
                 1,
             )
 
-    cv2.imshow("processed image", image)
-    cv2.waitKey(0)
-    filename = f"{processed_path}/{img}"
-    print(filename)
-    cv2.imwrite(filename, image)
-
-    return filename
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python main.py <image_path>")
-        sys.exit(1)
-
-    input_image_path = sys.argv[1]
-    output_string = process_image(input_image_path)
-    print(output_string)
+cv2.imshow("processed image", image)
+cv2.waitKey(0)
+<<<<<<< HEAD
+filename = f"{processed_path}/{img}"
+print(filename)
+cv2.imwrite(filename, image)
+=======
+filename = os.path.join(processed_path, img)
+print(filename)
+cv2.imwrite(filename, image)
+>>>>>>> 21012ce (create a new function of counting the person)
