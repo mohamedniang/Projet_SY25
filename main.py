@@ -6,11 +6,14 @@ import cv2
 # Model
 model = torch.hub.load("ultralytics/yolov5", "yolov5s")  # or yolov5n - yolov5x6, custom
 def process_image(img_path):
-    # Images
+
     base_path = "images"
     processed_path = "images/processed"
-    img = "image1.jpg"  # or file, Path, PIL, OpenCV, numpy, list
-    if not img_path : img_path = f"{base_path}/{img}"
+    # Images
+    if len(img_path) == 0 :
+        img = "download (12).png"  # or file, Path, PIL, OpenCV, numpy, list
+        img_path = f"{base_path}/{img}"
+
     # Inference
     results = model(img_path)
 
@@ -18,20 +21,8 @@ def process_image(img_path):
     results.print()  # or .show(), .save(), .crop(), .pandas(), etc.
 
     pred = results.xyxy[0].cpu().numpy()
-
-<<<<<<< HEAD
-image = cv2.imread(img_path)
-=======
-def count_person(results):
-    pred = results.xyxy[0].cpu().numpy()
-
-    # count the number of person
-    person_count = sum(1 for xyxy in pred if model.names[int(xyxy[5])].lower() == 'person')
-
-    return 'this image has %s person.' %person_count
-
-image = cv2.imread(img)
->>>>>>> 21012ce (create a new function of counting the person)
+    print(count_person(results))
+    image = cv2.imread(img_path)
 
     for xyxy in pred:
         label = model.names[int(xyxy[5])]
@@ -53,14 +44,29 @@ image = cv2.imread(img)
                 1,
             )
 
-cv2.imshow("processed image", image)
-cv2.waitKey(0)
-<<<<<<< HEAD
-filename = f"{processed_path}/{img}"
-print(filename)
-cv2.imwrite(filename, image)
-=======
-filename = os.path.join(processed_path, img)
-print(filename)
-cv2.imwrite(filename, image)
->>>>>>> 21012ce (create a new function of counting the person)
+    cv2.imshow("processed image", image)
+    cv2.waitKey(0)
+
+    # save the processed image
+    filename = f"{processed_path}/{img}" if len(img_path) == 0 else img_path
+    print(filename)
+    cv2.imwrite(filename, image)
+    return filename
+
+def count_person(results):
+    pred = results.xyxy[0].cpu().numpy()
+
+    # count the number of person
+    person_count = sum(1 for xyxy in pred if model.names[int(xyxy[5])].lower() == 'person')
+
+    return 'this image has %s person.' %person_count
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python app.py <image_path>")
+        sys.exit(1)
+
+    input_image_path = sys.argv[1]
+    output_string = process_image(input_image_path)
+    print(output_string)
